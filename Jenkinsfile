@@ -15,7 +15,10 @@ pipeline {
             steps {
                 script {
                     // Compiler les fichiers Java sous Windows
-                    bat 'javac -d out $(for /r %i in (*.java) do @echo %i)'
+                    bat '''
+                    mkdir out 2>nul
+                    for /r %%i in (*.java) do javac -d out %%i
+                    '''
                 }
             }
         }
@@ -23,7 +26,7 @@ pipeline {
         stage('Run') {
             steps {
                 script {
-                    // Exécuter le programme principal sous Windows
+                    // Exécuter le programme principal
                     bat 'java -cp out BoutiqueEnLigne'
                 }
             }
