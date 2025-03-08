@@ -29,6 +29,18 @@ pipeline {
             }
         }
     }
+    node {
+  stage('SCM') {
+    checkout scm
+  }
+  stage('SonarQube Analysis') {
+    def mvn = tool name: 'Default Maven', type: 'maven';
+    withSonarQubeEnv() {
+      bat "\"${mvn}\\bin\\mvn\" clean verify sonar:sonar -Dsonar.projectKey=BOU -Dsonar.projectName=\"BOU\""
+    }
+  }
+}
+
 
     post {
         success {
